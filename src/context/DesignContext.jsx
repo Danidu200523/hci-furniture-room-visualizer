@@ -10,6 +10,8 @@ export const DesignProvider = ({ children }) => {
     shape: "",
     width: "",
     height: "",
+    lWidth: "",   // extra for L
+    lHeight: "",  // extra for L
     color: "",
   });
 
