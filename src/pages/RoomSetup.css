@@ -9,12 +9,22 @@
 
 .room-card {
   width: 400px;
-  height: 500px;
+  max-height: 500px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
   padding: 40px;
   position: relative;
+}
+.room-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.room-card::-webkit-scrollbar-thumb {
+  background: #fbfcfc;
+  border-radius: 10px;
 }
 .left-section {
   display: flex;
@@ -71,7 +81,7 @@
   border: none;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: w500;
   cursor: pointer;
   transition: 0.3s ease;
 }

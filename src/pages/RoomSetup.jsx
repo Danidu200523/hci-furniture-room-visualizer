@@ -11,6 +11,8 @@ function RoomSetup() {
     shape: "",
     width: "",
     height: "",
+    lWidth: "",
+    lHeight: "",
     color: "",
   });
 
@@ -28,6 +30,10 @@ function RoomSetup() {
       alert("Please fill all fields");
       return;
     }
+    if (formData.shape === "l-shape" && (!formData.lWidth || !formData.lHeight)) {
+  alert("Please fill L shape dimensions");
+  return;
+}
 
     setRoom(formData);
     navigate("/editor-2d");
@@ -52,9 +58,10 @@ function RoomSetup() {
             <option value="">Select Shape</option>
             <option value="rectangle">Rectangle</option>
             <option value="square">Square</option>
+            <option value="l-shape">L-Shape</option>
           </select>
 
-          <label>Room Width</label>
+          <label>Room Width (m)</label>
           <input
             type="number"
             name="width"
@@ -62,7 +69,7 @@ function RoomSetup() {
             onChange={handleChange}
           />
 
-          <label>Room Height</label>
+          <label>Room Height (m)</label>
           <input
             type="number"
             name="height"
@@ -76,6 +83,26 @@ function RoomSetup() {
             name="color"
             onChange={handleChange}
           />
+          {formData.shape === "l-shape" && (
+  <>
+    <label>L Extension Width (m) </label>
+    <input
+      type="number"
+      name="lWidth"
+      placeholder="Enter L width"
+      onChange={handleChange}
+    />
+
+    <label>L Extension Height (m) </label>
+    <input
+      type="number"
+      name="lHeight"
+      placeholder="Enter L height"
+      onChange={handleChange}
+    />
+  </>
+)}
+
 
           <button type="submit" className="continue-btn">
             Continue
