@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DesignContext } from "../context/DesignContext";
-import "./RoomSetup.css";
+import "../styles/roomsetup.css";
 
 function RoomSetup() {
   const { setRoom } = useContext(DesignContext);
