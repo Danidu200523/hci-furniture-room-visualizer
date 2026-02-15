@@ -1,0 +1,113 @@
+.room-wrapper {
+  display: flex;
+  height: 100vh;
+  background: #ffffff;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.room-card {
+  width: 400px;
+  height: 500px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  position: relative;
+}
+.left-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* center title and card */
+ 
+}
+
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 12px;
+  width: 100%;
+  background: #18b8a5;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.room-title {
+  font-size: 36px;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+.room-title span {
+  color: #18b8a5;
+}
+
+.room-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.room-form label {
+  margin-top: 20px;
+  font-weight: 500;
+}
+
+.room-form input,
+.room-form select {
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.continue-btn {
+  margin-top: 30px;
+  padding: 14px;
+  background: #18b8a5;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.continue-btn:hover {
+  background: #139c8c;
+}
+
+.image-section img {
+  width: 300px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  text-align: center;
+}
+
+.logo-top {
+  font-size: 32px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+}
+
+.logo-bottom {
+  font-size: 24px;
+  font-family: 'Redressed', cursive;
+  color: #18b8a5;
+  margin-top: 4px;
+}
