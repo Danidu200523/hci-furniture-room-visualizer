@@ -34,16 +34,22 @@ function RoomSetup() {
   };
 
   return (
-    <div className="room-container">
-      <div className="form-card">
-        <h2 className="title">
-          <span className="highlight">Room</span> Setup
-        </h2>
+  <div className="room-wrapper">
 
-        <form onSubmit={handleSubmit}>
+    <div className="left-section">
+
+      <h1 className="room-title">
+        <span>Room</span> Setup
+      </h1>
+
+      <div className="room-card">
+        <div className="top-bar"></div>
+
+        <form onSubmit={handleSubmit} className="room-form">
+
           <label>Room Shape</label>
           <select name="shape" onChange={handleChange}>
-            <option value="">Select shape</option>
+            <option value="">Select Shape</option>
             <option value="rectangle">Rectangle</option>
             <option value="square">Square</option>
           </select>
@@ -74,14 +80,26 @@ function RoomSetup() {
           <button type="submit" className="continue-btn">
             Continue
           </button>
+
         </form>
       </div>
-
-      <div className="image-section">
-        <img src="/room-image.jpg" alt="Room Preview" />
-      </div>
     </div>
-  );
+
+    <div className="right-section">
+  <div className="logo">
+    <div className="logo-top">Hello</div>
+    <div className="logo-bottom">Room Planner</div>
+  </div>
+
+  <div className="image-section">
+    <img src="/room.png" alt="Room" />
+  </div>
+</div>
+
+
+  </div>
+);
+
 }
 
 export default RoomSetup;
