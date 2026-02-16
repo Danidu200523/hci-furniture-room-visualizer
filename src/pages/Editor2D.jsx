@@ -1,24 +1,27 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { DesignContext } from "../context/DesignContext";
+import "../styles/editor2d.css";
+import Sidebar from "../components/Sidebar";
+
+
 
 function Editor2D() {
   const { room } = useContext(DesignContext);
+
   const canvasRef = useRef(null);
 
   const [objects, setObjects] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Redraw whenever objects change
+  /* ===================== DRAW ===================== */
+
   useEffect(() => {
     draw();
-  }, [objects]);
+  }, [objects, room]);
 
-  // ================= DRAW FUNCTION =================
   const draw = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -27,78 +30,78 @@ function Editor2D() {
     drawObjects(ctx);
   };
 
-  // ================= DRAW ROOM =================
   const drawRoom = (ctx) => {
-    ctx.strokeStyle = "#000";
+    ctx.strokeStyle = "black";
     ctx.lineWidth = 3;
 
-    if (room.shape === "rectangle") {
-      ctx.strokeRect(100, 100, 500, 350);
+    if (room?.shape === "rectangle") {
+      ctx.strokeRect(200, 100, 500, 350);
     }
 
-    if (room.shape === "l-shape") {
+    if (room?.shape === "l-shape") {
       ctx.beginPath();
-      ctx.moveTo(100, 100);
-      ctx.lineTo(600, 100);
-      ctx.lineTo(600, 350);
-      ctx.lineTo(400, 350);
-      ctx.lineTo(400, 500);
-      ctx.lineTo(100, 500);
+      ctx.moveTo(200, 100);
+      ctx.lineTo(700, 100);
+      ctx.lineTo(700, 350);
+      ctx.lineTo(500, 350);
+      ctx.lineTo(500, 550);
+      ctx.lineTo(200, 550);
       ctx.closePath();
       ctx.stroke();
     }
   };
 
-  // ================= DRAW OBJECTS =================
   const drawObjects = (ctx) => {
     objects.forEach((obj) => {
       ctx.save();
+
       ctx.translate(obj.x, obj.y);
       ctx.rotate((obj.rotation * Math.PI) / 180);
 
-      ctx.fillStyle = obj.color;
-      ctx.fillRect(-30, -30, 60, 60);
+      ctx.fillStyle = "#2ea29";
 
-      // Highlight selected
+      if (obj.type === "chair") {
+        ctx.fillRect(-20, -20, 40, 40);
+      }
+
+      if (obj.type === "table") {
+        ctx.fillRect(-35, -20, 70, 40);
+      }
+
+      if (obj.type === "sofa") {
+        ctx.fillRect(-50, -20, 100, 40);
+      }
+
+      if (obj.type === "cabinet") {
+        ctx.fillRect(-20, -40, 40, 80);
+      }
+
       if (obj.id === selectedId) {
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
-        ctx.strokeRect(-30, -30, 60, 60);
+        ctx.strokeRect(-55, -55, 110, 110);
       }
 
       ctx.restore();
     });
   };
 
-  // ================= ADD OBJECT =================
+  /* ===================== ADD OBJECT ===================== */
+
   const addObject = (type) => {
-    const newObj = {
+    const newObject = {
       id: Date.now(),
       type,
-      x: 300,
+      x: 400,
       y: 250,
       rotation: 0,
-      color: "#18b8a5",
     };
 
-    setObjects([...objects, newObj]);
-    setSelectedId(newObj.id);
+    setObjects((prev) => [...prev, newObject]);
   };
 
-  // ================= ROTATE =================
-  const rotateSelected = () => {
-    if (!selectedId) return;
+  /* ===================== DRAG ===================== */
 
-    const updated = objects.map((obj) =>
-      obj.id === selectedId
-        ? { ...obj, rotation: obj.rotation + 15 }
-        : obj
-    );
-
-    setObjects(updated);
-  };
-
-  // ================= DRAG LOGIC =================
   const handleMouseDown = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
@@ -110,7 +113,7 @@ function Editor2D() {
       const dx = mouseX - obj.x;
       const dy = mouseY - obj.y;
 
-      if (Math.abs(dx) < 30 && Math.abs(dy) < 30) {
+      if (Math.abs(dx) < 50 && Math.abs(dy) < 50) {
         setSelectedId(obj.id);
         setIsDragging(true);
       }
@@ -126,6 +129,48 @@ function Editor2D() {
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
+    const half = 40;
+
+    const corners = [
+      { x: mouseX - half, y: mouseY - half },
+      { x: mouseX + half, y: mouseY - half },
+      { x: mouseX - half, y: mouseY + half },
+      { x: mouseX + half, y: mouseY + half },
+    ];
+
+    let allowed = true;
+
+    // RECTANGLE CHECK
+    if (room?.shape === "rectangle") {
+      corners.forEach((c) => {
+        if (
+          c.x < 200 ||
+          c.x > 700 ||
+          c.y < 100 ||
+          c.y > 450
+        ) {
+          allowed = false;
+        }
+      });
+    }
+
+    // L-SHAPE CHECK
+    if (room?.shape === "l-shape") {
+      corners.forEach((c) => {
+        const insideMain =
+          c.x >= 200 && c.x <= 700 && c.y >= 100 && c.y <= 350;
+
+        const insideBottom =
+          c.x >= 200 && c.x <= 500 && c.y >= 350 && c.y <= 550;
+
+        if (!insideMain && !insideBottom) {
+          allowed = false;
+        }
+      });
+    }
+
+    if (!allowed) return;
+
     const updated = objects.map((obj) =>
       obj.id === selectedId
         ? { ...obj, x: mouseX, y: mouseY }
@@ -139,41 +184,56 @@ function Editor2D() {
     setIsDragging(false);
   };
 
-  // ================= UI =================
-  return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      
-      {/* LEFT CONTROLS */}
-      <div style={{ width: "220px", padding: "20px" }}>
-        <h3>Controls</h3>
+  /* ===================== ROTATE ===================== */
 
-        <button onClick={() => addObject("chair")}>
-          Add Chair
-        </button>
-        <br /><br />
+  const rotateSelected = () => {
+    if (!selectedId) return;
 
-        <button onClick={() => addObject("table")}>
-          Add Table
-        </button>
-        <br /><br />
+    const updated = objects.map((obj) =>
+      obj.id === selectedId
+        ? { ...obj, rotation: obj.rotation + 15 }
+        : obj
+    );
 
-        <button onClick={rotateSelected}>
-          Rotate Selected
-        </button>
+    setObjects(updated);
+  };
+
+  /* ===================== DELETE ===================== */
+
+  const deleteSelected = () => {
+    setObjects(objects.filter((obj) => obj.id !== selectedId));
+    setSelectedId(null);
+  };
+
+  /* ===================== UI ===================== */
+
+ return (
+  <div className="editor-page">
+
+    <Sidebar
+      addObject={addObject}
+      rotateSelected={rotateSelected}
+      deleteSelected={deleteSelected}
+    />
+
+    <div className="main-content">
+      <h2>2D View</h2>
+
+      <div className="canvas-container">
+        <canvas
+          ref={canvasRef}
+          width={1000}
+          height={650}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+        />
       </div>
-
-      {/* CANVAS */}
-      <canvas
-        ref={canvasRef}
-        width={900}
-        height={650}
-        style={{ border: "1px solid #999" }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      />
     </div>
-  );
+
+  </div>
+);
+
 }
 
 export default Editor2D;
