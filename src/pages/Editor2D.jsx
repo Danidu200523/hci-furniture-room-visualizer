@@ -10,17 +10,7 @@ function Editor2D() {
   const [objects, setObjects] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-
-  /* ===============================
-     LOAD SAVED DESIGN
-  =============================== */
-  useEffect(() => {
-    const saved = localStorage.getItem("savedDesign");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setObjects(parsed.objects || []);
-    }
-  }, []);
+  const [roomBounds, setRoomBounds] = useState(null);
 
   /* ===============================
      RESIZE CANVAS
@@ -37,35 +27,84 @@ function Editor2D() {
 
   useEffect(() => {
     draw();
-  }, [objects]);
+  }, [objects, room]);
 
   /* ===============================
-     DRAWING
+     MAIN DRAW
   =============================== */
   const draw = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    if (!canvas) return;
 
+    const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawRoom(ctx);
     drawObjects(ctx);
   };
 
+  /* ===============================
+     DRAW ROOM
+  =============================== */
   const drawRoom = (ctx) => {
+    if (!room || !room.width || !room.height) return;
+
     const canvas = canvasRef.current;
 
-    const roomWidth = canvas.width * 0.6;
-    const roomHeight = canvas.height * 0.6;
+    const width = Number(room.width);
+    const height = Number(room.height);
+
+    const padding = 80;
+
+    const scaleX = (canvas.width - padding) / width;
+    const scaleY = (canvas.height - padding) / height;
+    const scale = Math.min(scaleX, scaleY);
+
+    const roomWidth = width * scale;
+    const roomHeight = height * scale;
 
     const startX = (canvas.width - roomWidth) / 2;
     const startY = (canvas.height - roomHeight) / 2;
 
-    ctx.strokeStyle = "#000";
+    setRoomBounds({
+      startX,
+      startY,
+      roomWidth,
+      roomHeight,
+      scale,
+    });
+
     ctx.lineWidth = 3;
-    ctx.strokeRect(startX, startY, roomWidth, roomHeight);
+    ctx.strokeStyle = "#000";
+
+    if (room.shape === "rectangle") {
+      ctx.fillStyle = room.color || "#FFFFFF";
+      ctx.fillRect(startX, startY, roomWidth, roomHeight);
+      ctx.strokeRect(startX, startY, roomWidth, roomHeight);
+    }
+
+    if (room.shape === "l-shape") {
+      const lWidth = Number(room.lWidth || 0) * scale;
+      const lHeight = Number(room.lHeight || 0) * scale;
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(startX + roomWidth, startY);
+      ctx.lineTo(startX + roomWidth, startY + roomHeight);
+      ctx.lineTo(startX + lWidth, startY + roomHeight);
+      ctx.lineTo(startX + lWidth, startY + lHeight);
+      ctx.lineTo(startX, startY + lHeight);
+      ctx.closePath();
+
+      ctx.fillStyle = room.color || "#FFFFFF";
+      ctx.fill();
+      ctx.stroke();
+    }
   };
 
+  /* ===============================
+     DRAW OBJECTS
+  =============================== */
   const drawObjects = (ctx) => {
     objects.forEach((obj) => {
       ctx.save();
@@ -75,27 +114,21 @@ function Editor2D() {
 
       switch (obj.type) {
         case "chair":
-          ctx.fillStyle = "#00C8B3"; // Mint
+          ctx.fillStyle = "#00C8B3";
           ctx.fillRect(-25, -25, 50, 50);
           break;
-
         case "table":
-          ctx.fillStyle = "#525252"; // Gray
+          ctx.fillStyle = "#525252";
           ctx.fillRect(-40, -20, 80, 40);
           break;
-
         case "sofa":
-          ctx.fillStyle = "#444444"; // Dark Gray
-          ctx.beginPath();
-          ctx.roundRect(-60, -25, 120, 50, 15);
-          ctx.fill();
+          ctx.fillStyle = "#E0E1E1";
+          ctx.fillRect(-60, -25, 120, 50);
           break;
-
         case "cabinet":
-          ctx.fillStyle = "#C0F6F1"; // Light mint
+          ctx.fillStyle = "#C0F6F1";
           ctx.fillRect(-20, -50, 40, 100);
           break;
-
         default:
           ctx.fillStyle = "#00C8B3";
           ctx.fillRect(-30, -30, 60, 60);
@@ -120,36 +153,27 @@ function Editor2D() {
      ADD OBJECT
   =============================== */
   const addObject = (type) => {
-    let width = 60;
-    let height = 60;
-
-    if (type === "chair") {
-      width = 50;
-      height = 50;
-    }
-
-    if (type === "table") {
-      width = 80;
-      height = 40;
-    }
-
-    if (type === "sofa") {
-      width = 120;
-      height = 50;
-    }
-
-    if (type === "cabinet") {
-      width = 40;
-      height = 100;
-    }
-
     const newObj = {
       id: Date.now(),
       type,
-      x: 300,
-      y: 250,
-      width,
-      height,
+      x: roomBounds?.startX + 20 || 200,
+      y: roomBounds?.startY + 20 || 200,
+      width:
+        type === "chair"
+          ? 50
+          : type === "table"
+          ? 80
+          : type === "sofa"
+          ? 120
+          : 40,
+      height:
+        type === "chair"
+          ? 50
+          : type === "table"
+          ? 40
+          : type === "sofa"
+          ? 50
+          : 100,
       rotation: 0,
     };
 
@@ -180,23 +204,18 @@ function Editor2D() {
   /* ===============================
      SAVE
   =============================== */
- const saveDesign = () => {
-  const canvas = canvasRef.current;
+  const saveDesign = () => {
+    const canvas = canvasRef.current;
+    const image = canvas.toDataURL("image/png");
 
-  // Convert canvas to image
-  const image = canvas.toDataURL("image/png", 1.0);
-
-  // Create download link
-  const link = document.createElement("a");
-  link.href = image;
-  link.download = "room-design.png";
-  link.click();
-
-  alert("Design saved as image successfully!");
-};
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "room-design.png";
+    link.click();
+  };
 
   /* ===============================
-     DRAG
+     DRAG WITH BOUNDARY CONTROL
   =============================== */
   const handleMouseDown = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -218,18 +237,40 @@ function Editor2D() {
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging) return;
+    if (!isDragging || !roomBounds) return;
 
     const rect = canvasRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
     setObjects((prev) =>
-      prev.map((obj) =>
-        obj.id === selectedId
-          ? { ...obj, x: mouseX - obj.width / 2, y: mouseY - obj.height / 2 }
-          : obj
-      )
+      prev.map((obj) => {
+        if (obj.id !== selectedId) return obj;
+
+        let newX = mouseX - obj.width / 2;
+        let newY = mouseY - obj.height / 2;
+
+        const minX = roomBounds.startX;
+        const minY = roomBounds.startY;
+        const maxX = roomBounds.startX + roomBounds.roomWidth - obj.width;
+        const maxY = roomBounds.startY + roomBounds.roomHeight - obj.height;
+
+        newX = Math.max(minX, Math.min(newX, maxX));
+        newY = Math.max(minY, Math.min(newY, maxY));
+
+        if (room.shape === "l-shape") {
+          const lWidth = Number(room.lWidth || 0) * roomBounds.scale;
+          const lHeight = Number(room.lHeight || 0) * roomBounds.scale;
+
+          const inCutArea =
+            newX + obj.width > roomBounds.startX + lWidth &&
+            newY < roomBounds.startY + lHeight;
+
+          if (inCutArea) return obj;
+        }
+
+        return { ...obj, x: newX, y: newY };
+      })
     );
   };
 
@@ -239,7 +280,6 @@ function Editor2D() {
 
   return (
     <div className="editor-page">
-
       <Sidebar
         addObject={addObject}
         rotateSelected={rotateSelected}
@@ -260,7 +300,6 @@ function Editor2D() {
           />
         </div>
       </div>
-
     </div>
   );
 }

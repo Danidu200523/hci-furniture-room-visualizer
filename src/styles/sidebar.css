@@ -75,7 +75,7 @@
   padding: 12px;
   border-radius: 10px;
   border: none;
-  background: #19b4a4;
+  background: var(--mint);
   color: white;
   font-weight: 600;
   cursor: pointer;
