@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaChair, FaTable, FaCouch, FaArchive, FaCube } from "react-icons/fa";
 import { MdRotateRight, MdDelete } from "react-icons/md";
-import "../styles/editor2d.css";
+import "../styles/sidebar.css";
 
-function Sidebar({ addObject, rotateSelected, deleteSelected }) {
+function Sidebar({ addObject, rotateSelected, deleteSelected, saveDesign }) {
 
   const [activeItem, setActiveItem] = useState(null);
 
@@ -68,7 +68,7 @@ function Sidebar({ addObject, rotateSelected, deleteSelected }) {
           Rotate
         </button>
 
-        <button className="primary-btn">
+        <button className="primary-btn" onClick={saveDesign}>
           Save Design
         </button>
 
