@@ -1,13 +1,13 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { DesignContext } from "../context/DesignContext";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar2D";
 import "../styles/editor2d.css";
 
 function Editor2D() {
-  const { room } = useContext(DesignContext);
+  const { room, objects, setObjects } = useContext(DesignContext);
   const canvasRef = useRef(null);
 
-  const [objects, setObjects] = useState([]);
+
   const [selectedId, setSelectedId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [roomBounds, setRoomBounds] = useState(null);
@@ -78,7 +78,7 @@ function Editor2D() {
     ctx.strokeStyle = "#000";
 
     if (room.shape === "rectangle") {
-      ctx.fillStyle = room.color || "#FFFFFF";
+      ctx.fillStyle = room.color || "var(--white)";
       ctx.fillRect(startX, startY, roomWidth, roomHeight);
       ctx.strokeRect(startX, startY, roomWidth, roomHeight);
     }
@@ -96,7 +96,7 @@ function Editor2D() {
       ctx.lineTo(startX, startY + lHeight);
       ctx.closePath();
 
-      ctx.fillStyle = room.color || "#FFFFFF";
+      ctx.fillStyle = room.color || "var(--white)";
       ctx.fill();
       ctx.stroke();
     }
@@ -118,11 +118,11 @@ function Editor2D() {
           ctx.fillRect(-25, -25, 50, 50);
           break;
         case "table":
-          ctx.fillStyle = "#525252";
+          ctx.fillStyle = "var(--dark-gray)";
           ctx.fillRect(-40, -20, 80, 40);
           break;
         case "sofa":
-          ctx.fillStyle = "#E0E1E1";
+          ctx.fillStyle = "var(--light-gray)";
           ctx.fillRect(-60, -25, 120, 50);
           break;
         case "cabinet":

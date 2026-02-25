@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { FaChair, FaTable, FaCouch, FaArchive, FaCube } from "react-icons/fa";
 import { MdRotateRight, MdDelete } from "react-icons/md";
-import "../styles/sidebar.css";
+import "../styles/sidebar2D.css";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({ addObject, rotateSelected, deleteSelected, saveDesign }) {
 
   const [activeItem, setActiveItem] = useState(null);
+   const navigate = useNavigate();
+
 
   const handleClick = (type) => {
     setActiveItem(type);
@@ -58,10 +61,10 @@ function Sidebar({ addObject, rotateSelected, deleteSelected, saveDesign }) {
 
       <div className="bottom-controls">
 
-        <button className="outline-btn">
-          <FaCube className="icon" />
-          Switch to 3D View
-        </button>
+       
+        <button onClick={() => navigate("/view-3d")}>
+  Switch to 3D View
+</button>
 
         <button className="outline-btn" onClick={rotateSelected}>
           <MdRotateRight className="icon" />
