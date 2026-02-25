@@ -1,22 +1,30 @@
 import { createContext, useState } from "react";
 
-// Create Context
-// eslint-disable-next-line react-refresh/only-export-components
-export const DesignContext = createContext();
+const DesignContext = createContext();
+export { DesignContext };
 
-// Create Provider
 export const DesignProvider = ({ children }) => {
   const [room, setRoom] = useState({
     shape: "",
     width: "",
     height: "",
-    lWidth: "",   // extra for L
-    lHeight: "",  // extra for L
+    lWidth: "",
+    lHeight: "",
     color: "",
   });
 
+  // 🔥 ADD THIS
+  const [objects, setObjects] = useState([]);
+
   return (
-    <DesignContext.Provider value={{ room, setRoom }}>
+    <DesignContext.Provider
+      value={{
+        room,
+        setRoom,
+        objects,
+        setObjects,
+      }}
+    >
       {children}
     </DesignContext.Provider>
   );
