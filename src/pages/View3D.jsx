@@ -11,27 +11,34 @@ function View3D() {
 
   useEffect(() => {
     const container = mountRef.current;
+    if (!container) return;
+
     const width = container.clientWidth;
     const height = container.clientHeight;
 
+    /* ================= SCENE ================= */
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf5f5f5);
 
+    /* ================= CAMERA ================= */
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
     camera.position.set(200, 200, 300);
 
+    /* ================= RENDERER ================= */
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
 
+    /* ================= CONTROLS ================= */
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
+    /* ================= ROOM SIZE ================= */
+    const roomWidth = Number(room.width || 10) * 10;
+    const roomHeight = Number(room.height || 10) * 10;
+
     /* ================= FLOOR ================= */
-    const floorGeometry = new THREE.PlaneGeometry(
-      Number(room.width || 10) * 10,
-      Number(room.height || 10) * 10
-    );
+    const floorGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
 
     const floorMaterial = new THREE.MeshStandardMaterial({
       color: room.color || "#ffffff",
@@ -69,8 +76,13 @@ function View3D() {
 
       const mesh = new THREE.Mesh(geometry, material);
 
-      mesh.position.x = obj.x - 300;
-      mesh.position.z = obj.y - 300;
+      /* ===== CENTER CORRECT CONVERSION ===== */
+
+      const centeredX = obj.x - roomWidth / 2;
+      const centeredZ = obj.y - roomHeight / 2;
+
+      mesh.position.x = centeredX;
+      mesh.position.z = centeredZ;
       mesh.position.y = geometry.parameters.height / 2;
 
       scene.add(mesh);
@@ -81,7 +93,7 @@ function View3D() {
     directionalLight.position.set(200, 300, 200);
     scene.add(directionalLight);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
     /* ================= ANIMATION ================= */
@@ -125,7 +137,7 @@ function View3D() {
         rotateSelected={handleRotate}
         deleteSelected={handleDelete}
         saveDesign={handleSave}
-        is3D={true} 
+        is3D={true}
       />
 
       <div className="view3d-main">

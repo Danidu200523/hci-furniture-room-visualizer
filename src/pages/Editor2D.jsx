@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { DesignContext } from "../context/DesignContext";
 import Sidebar from "../components/Sidebar2D";
 import "../styles/editor2d.css";
+import { getColor } from "../utils/colors";
 
 function Editor2D() {
   const { room, objects, setObjects } = useContext(DesignContext);
@@ -96,7 +97,7 @@ function Editor2D() {
       ctx.lineTo(startX, startY + lHeight);
       ctx.closePath();
 
-      ctx.fillStyle = room.color || "var(--white)";
+      ctx.fillStyle = room.color ||  getColor("--white");
       ctx.fill();
       ctx.stroke();
     }
@@ -118,11 +119,11 @@ function Editor2D() {
           ctx.fillRect(-25, -25, 50, 50);
           break;
         case "table":
-          ctx.fillStyle = "var(--dark-gray)";
+          ctx.fillStyle = getColor("--gray");
           ctx.fillRect(-40, -20, 80, 40);
           break;
         case "sofa":
-          ctx.fillStyle = "var(--light-gray)";
+          ctx.fillStyle = getColor("--light-gray");
           ctx.fillRect(-60, -25, 120, 50);
           break;
         case "cabinet":
