@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DesignContext } from "../context/DesignContext";
 import Sidebar from "../components/Sidebar2D";
 import "../styles/editor2d.css";
@@ -7,7 +8,7 @@ import { getColor } from "../utils/colors";
 function Editor2D() {
   const { room, objects, setObjects } = useContext(DesignContext);
   const canvasRef = useRef(null);
-
+  const navigate = useNavigate();
 
   const [selectedId, setSelectedId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -97,7 +98,7 @@ function Editor2D() {
       ctx.lineTo(startX, startY + lHeight);
       ctx.closePath();
 
-      ctx.fillStyle = room.color ||  getColor("--white");
+      ctx.fillStyle = room.color || getColor("--white");
       ctx.fill();
       ctx.stroke();
     }
@@ -115,7 +116,7 @@ function Editor2D() {
 
       switch (obj.type) {
         case "chair":
-          ctx.fillStyle =  getColor("--mint");
+          ctx.fillStyle = getColor("--mint");
           ctx.fillRect(-25, -25, 50, 50);
           break;
         case "table":
@@ -181,8 +182,6 @@ function Editor2D() {
     setObjects((prev) => [...prev, newObj]);
   };
 
-  /* ROTATE*/
-  
   const rotateSelected = () => {
     setObjects((prev) =>
       prev.map((obj) =>
@@ -193,17 +192,11 @@ function Editor2D() {
     );
   };
 
-  /* ===============================
-     DELETE
-  =============================== */
   const deleteSelected = () => {
     setObjects((prev) => prev.filter((obj) => obj.id !== selectedId));
     setSelectedId(null);
   };
 
-  /* ===============================
-     SAVE
-  =============================== */
   const saveDesign = () => {
     const canvas = canvasRef.current;
     const image = canvas.toDataURL("image/png");
@@ -215,7 +208,7 @@ function Editor2D() {
   };
 
   /* ===============================
-     DRAG WITH BOUNDARY CONTROL
+     DRAG
   =============================== */
   const handleMouseDown = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -258,17 +251,6 @@ function Editor2D() {
         newX = Math.max(minX, Math.min(newX, maxX));
         newY = Math.max(minY, Math.min(newY, maxY));
 
-        if (room.shape === "l-shape") {
-          const lWidth = Number(room.lWidth || 0) * roomBounds.scale;
-          const lHeight = Number(room.lHeight || 0) * roomBounds.scale;
-
-          const inCutArea =
-            newX + obj.width > roomBounds.startX + lWidth &&
-            newY < roomBounds.startY + lHeight;
-
-          if (inCutArea) return obj;
-        }
-
         return { ...obj, x: newX, y: newY };
       })
     );
@@ -280,6 +262,14 @@ function Editor2D() {
 
   return (
     <div className="editor-page">
+      {/* Back Button */}
+      <button
+        className="back-icon"
+        onClick={() => navigate("/room-setup")}
+      >
+        ←
+      </button>
+
       <Sidebar
         addObject={addObject}
         rotateSelected={rotateSelected}

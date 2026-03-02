@@ -21,8 +21,9 @@ function View3D() {
     scene.background = new THREE.Color(0xf5f5f5);
 
     /* ================= CAMERA ================= */
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
-    camera.position.set(200, 200, 300);
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 5000);
+    camera.position.set(400, 400, 400);
+    camera.lookAt(0, 0, 0);
 
     /* ================= RENDERER ================= */
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -33,70 +34,144 @@ function View3D() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    /* ================= ROOM SIZE ================= */
-    const roomWidth = Number(room.width || 10) * 10;
-    const roomHeight = Number(room.height || 10) * 10;
+    /* ================= ROOM SCALE ================= */
+
+    const padding = 80;
+    const roomWidthRaw = Number(room.width || 10);
+    const roomHeightRaw = Number(room.height || 10);
+
+    const scaleX = (width - padding) / roomWidthRaw;
+    const scaleY = (height - padding) / roomHeightRaw;
+    const scale = Math.min(scaleX, scaleY);
+
+    const scaledRoomWidth = roomWidthRaw * scale;
+    const scaledRoomHeight = roomHeightRaw * scale;
+
+    const startX = (width - scaledRoomWidth) / 2;
+    const startY = (height - scaledRoomHeight) / 2;
 
     /* ================= FLOOR ================= */
-    const floorGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
 
-    const floorMaterial = new THREE.MeshStandardMaterial({
-      color: room.color || "#ffffff",
-      side: THREE.DoubleSide,
-    });
+    let floor;
 
-    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.rotation.x = -Math.PI / 2;
+    if (room.shape === "l-shape") {
+      const lWidth = Number(room.lWidth || 0) * scale;
+      const lHeight = Number(room.lHeight || 0) * scale;
+
+      const shape = new THREE.Shape();
+
+      shape.moveTo(0, 0);
+      shape.lineTo(scaledRoomWidth, 0);
+      shape.lineTo(scaledRoomWidth, scaledRoomHeight);
+      shape.lineTo(lWidth, scaledRoomHeight);
+      shape.lineTo(lWidth, lHeight);
+      shape.lineTo(0, lHeight);
+      shape.lineTo(0, 0);
+
+      const geometry = new THREE.ShapeGeometry(shape);
+
+      const material = new THREE.MeshStandardMaterial({
+        color: room.color || "#ffffff",
+        side: THREE.DoubleSide,
+      });
+
+      floor = new THREE.Mesh(geometry, material);
+      floor.rotation.x = -Math.PI / 2;
+
+      floor.position.set(
+        -scaledRoomWidth / 2,
+        0,
+        scaledRoomHeight / 2
+      );
+    } else {
+      const geometry = new THREE.PlaneGeometry(
+        scaledRoomWidth,
+        scaledRoomHeight
+      );
+
+      const material = new THREE.MeshStandardMaterial({
+        color: room.color || "#ffffff",
+        side: THREE.DoubleSide,
+      });
+
+      floor = new THREE.Mesh(geometry, material);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.set(0, 0, 0);
+    }
+
     scene.add(floor);
 
+    /* ================= BEAUTIFUL FURNITURE COLORS ================= */
+
+    const furnitureColors = {
+      chair: "#FF6B6B",     // soft red
+      table: "#4ECDC4",     // teal
+      sofa: "#556270",      // modern grey-blue
+      cabinet: "#C7B198",   // warm wood tone
+      bed: "#8E44AD",       // royal purple
+      default: "#2ECC71"    // fallback green
+    };
+
     /* ================= OBJECTS ================= */
+
     objects.forEach((obj) => {
       let geometry;
 
       switch (obj.type) {
         case "chair":
-          geometry = new THREE.BoxGeometry(20, 20, 20);
+          geometry = new THREE.BoxGeometry(50, 20, 50);
           break;
         case "table":
-          geometry = new THREE.BoxGeometry(50, 10, 30);
+          geometry = new THREE.BoxGeometry(80, 10, 40);
           break;
         case "sofa":
-          geometry = new THREE.BoxGeometry(70, 25, 35);
+          geometry = new THREE.BoxGeometry(120, 25, 50);
           break;
         case "cabinet":
-          geometry = new THREE.BoxGeometry(20, 50, 20);
+          geometry = new THREE.BoxGeometry(40, 50, 40);
           break;
         default:
-          geometry = new THREE.BoxGeometry(30, 30, 30);
+          geometry = new THREE.BoxGeometry(60, 30, 60);
       }
 
       const material = new THREE.MeshStandardMaterial({
-        color: 0x00c8b3,
+        color: furnitureColors[obj.type] || furnitureColors.default,
+        metalness: 0.3,
+        roughness: 0.6
       });
 
       const mesh = new THREE.Mesh(geometry, material);
 
-      /* ===== CENTER CORRECT CONVERSION ===== */
+      // remove canvas offset
+      const localX = obj.x - startX;
+      const localY = obj.y - startY;
 
-      const centeredX = obj.x - roomWidth / 2;
-      const centeredZ = obj.y - roomHeight / 2;
+      // convert to centered 3D
+      const x = localX - scaledRoomWidth / 2;
+      const z = -(localY - scaledRoomHeight / 2);
 
-      mesh.position.x = centeredX;
-      mesh.position.z = centeredZ;
-      mesh.position.y = geometry.parameters.height / 2;
+      mesh.position.set(
+        x,
+        geometry.parameters.height / 2,
+        z
+      );
+
+      mesh.rotation.y = (obj.rotation * Math.PI) / 180;
 
       scene.add(mesh);
     });
 
     /* ================= LIGHTING ================= */
+
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(200, 300, 200);
+    directionalLight.position.set(500, 500, 500);
     scene.add(directionalLight);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
     /* ================= ANIMATION ================= */
+
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
@@ -111,10 +186,10 @@ function View3D() {
     };
   }, [room, objects]);
 
-  /* ================= BUTTON FUNCTIONS ================= */
-
   const handleSave = () => {
     const canvas = mountRef.current.querySelector("canvas");
+    if (!canvas) return;
+
     const image = canvas.toDataURL("image/png");
 
     const link = document.createElement("a");
