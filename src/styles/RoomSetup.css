@@ -1,3 +1,4 @@
+
 .room-wrapper {
   display: flex;
   height: 100vh;
@@ -12,7 +13,7 @@
   max-height: 500px;
   overflow-y: auto;
   scroll-behavior: smooth;
-  background: #ffffff;
+  background: var(--white);
   border-radius: 20px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -39,7 +40,7 @@
   left: 0;
   height: 12px;
   width: 100%;
-  background: #18b8a5;
+  background: var(--mint);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
@@ -51,7 +52,7 @@
 }
 
 .room-title span {
-  color: #18b8a5;
+  color:var(--mint);
 }
 
 .room-form {
@@ -76,12 +77,12 @@
 .continue-btn {
   margin-top: 30px;
   padding: 14px;
-  background: #18b8a5;
+  background: var(--mint);
   color: white;
   border: none;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: w500;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.3s ease;
 }
@@ -118,6 +119,6 @@
 .logo-bottom {
   font-size: 24px;
   font-family: 'Redressed', cursive;
-  color: #18b8a5;
+  color: var(--mint);
   margin-top: 4px;
 }
