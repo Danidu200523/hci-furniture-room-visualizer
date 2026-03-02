@@ -115,7 +115,7 @@ function Editor2D() {
 
       switch (obj.type) {
         case "chair":
-          ctx.fillStyle = "#00C8B3";
+          ctx.fillStyle =  getColor("--mint");
           ctx.fillRect(-25, -25, 50, 50);
           break;
         case "table":
@@ -127,11 +127,11 @@ function Editor2D() {
           ctx.fillRect(-60, -25, 120, 50);
           break;
         case "cabinet":
-          ctx.fillStyle = "#C0F6F1";
+          ctx.fillStyle = getColor("--light-mint");
           ctx.fillRect(-20, -50, 40, 100);
           break;
         default:
-          ctx.fillStyle = "#00C8B3";
+          ctx.fillStyle = getColor("--mint");
           ctx.fillRect(-30, -30, 60, 60);
       }
 
@@ -181,9 +181,8 @@ function Editor2D() {
     setObjects((prev) => [...prev, newObj]);
   };
 
-  /* ===============================
-     ROTATE
-  =============================== */
+  /* ROTATE*/
+  
   const rotateSelected = () => {
     setObjects((prev) =>
       prev.map((obj) =>

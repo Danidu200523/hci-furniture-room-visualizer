@@ -34,18 +34,18 @@ button {
 
 /* Outline Buttons */
 .btn-outline {
-  background: #FFFFFF;
+  background:var(--white);
   border: 2px solid var(--mint);
   color: #000;
 }
 
 .btn-outline:hover {
-  background: #C0F6F1;
+  background: var(--light-mint);
 }
 
 /* Primary (Mint Filled) */
 .btn-primary {
-  background: #00C8B3;
+  background: var(--mint);
   color: white;
   border: none;
 }
@@ -56,7 +56,7 @@ button {
 
 /* Danger */
 .btn-danger {
-  background: #FFD7D7;
+  background: var(--light-red);
   border: none;
   color: #000;
 }

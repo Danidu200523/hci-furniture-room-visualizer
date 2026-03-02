@@ -16,7 +16,7 @@
 .logo span {
   font-family: 'Redressed', cursive;
   font-size: 22px;
-  color: #19b4a4;
+  color: var(--mint);
 }
 
 .menu {
@@ -45,7 +45,7 @@
 }
 
 .menu-item.active {
-  background: #bfe9e5;
+  background: var(--light-mint);
 }
 
 .icon {
@@ -65,7 +65,7 @@
   gap: 10px;
   padding: 12px;
   border-radius: 10px;
-  border: 1.5px solid #19b4a4;
+  border: 1.5px solid var(--mint);
   background: transparent;
   cursor: pointer;
   font-weight: 500;
@@ -77,7 +77,7 @@
   border: none;
   background: var(--mint);
   color: white;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -88,7 +88,7 @@
   padding: 12px;
   border-radius: 10px;
   border: none;
-  background: #f2c6c6;
+  background: var(--light-red);
   font-weight: 500;
   cursor: pointer;
 }
