@@ -1,0 +1,142 @@
+/* ================= PAGE ================= */
+
+.login-page {
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding: 30px 40px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ================= LOGO ================= */
+
+.logo h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.logo span {
+  color: #00C8B3;
+  font-size: 14px;
+}
+
+/* ================= TITLE ================= */
+
+.title {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.title span {
+  color: #00C8B3;
+}
+
+/* ================= LAYOUT ================= */
+
+.login-container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* makes image height equal to login card */
+  gap: 40px;
+}
+
+/* ================= IMAGE ================= */
+
+.login-image {
+  width: 280px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%; /* important for same height as card */
+  object-fit: cover;
+}
+
+/* ================= LOGIN CARD ================= */
+
+.login-card {
+  width: 340px;
+  background: white;
+  padding: 60px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+/* top green line */
+
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6px;
+  width: 100%;
+  background: #00C8B3;
+  border-radius: 12px 12px 0 0;
+}
+
+.login-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ================= INPUTS ================= */
+
+.login-card label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 9px;
+  margin: 6px 0 14px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.login-card input:focus {
+  border-color: #00C8B3;
+}
+
+/* ================= BUTTON ================= */
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background: #00C8B3;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.login-btn:hover {
+  background: #00b3a0;
+}
+
+/* ================= ERROR ================= */
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* ================= TERMS ================= */
+
+.terms {
+  font-size: 10px;
+  color: #777;
+  margin-top: 14px;
+  text-align: center;
+}
