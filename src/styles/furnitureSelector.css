@@ -1,0 +1,48 @@
+.selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selector-box {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.style-card {
+  padding: 20px;
+  border: 1px solid var(--light-mint);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.style-card:hover {
+  background: var(--light-mint);
+}
+
+.close-btn {
+  margin-top: 15px;
+  padding: 8px 15px;
+  border: 1px solid var(--light-mint);
+  background: white;
+  cursor: pointer;
+}
+.close-btn:hover {
+  background: var(--gray);
+}

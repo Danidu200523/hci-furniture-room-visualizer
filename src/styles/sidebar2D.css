@@ -1,40 +1,41 @@
-/* SIDEBAR */
+
 .sidebar {
   width: 240px;
-  padding: 30px 15px;
+  padding: 20px 12px;
   background: var(--white);
   display: flex;
   flex-direction: column;
 }
 
 .logo h1 {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 2px; 
 }
 
 .logo span {
   font-family: 'Redressed', cursive;
-  font-size: 22px;
+  font-size: 20px;
   color: var(--mint);
 }
 
+
 .menu {
-  margin-top: 25px;
+  margin-top: 18px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 10px;
+  padding: 8px 12px; 
   border-radius: 10px;
   background: transparent;
   border: none;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: 0.2s ease;
@@ -49,21 +50,32 @@
 }
 
 .icon {
-  font-size: 18px;
+  font-size: 16px;
 }
+
 
 .bottom-controls {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px; 
+}
+
+.switch-btn {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--mint);
+  background: var(--light-mint);
+  color: black;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .outline-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px;
+  gap: 8px;
+  padding: 10px;
   border-radius: 10px;
   border: 1.5px solid var(--mint);
   background: transparent;
@@ -72,7 +84,7 @@
 }
 
 .primary-btn {
-  padding: 12px;
+  padding: 10px;
   border-radius: 10px;
   border: none;
   background: var(--mint);
@@ -84,8 +96,8 @@
 .danger-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px;
+  gap: 8px;
+  padding: 10px;
   border-radius: 10px;
   border: none;
   background: var(--light-red);
