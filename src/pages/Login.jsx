@@ -23,25 +23,25 @@ function Login() {
   return (
     <div className="login-page">
 
-      {/* Logo */}
+     
       <div className="logo">
         <h2>Hello</h2>
         <span>Room Planner</span>
       </div>
 
-      {/* Title */}
+      
       <h1 className="title">
         Furniture <span>Room</span> Visualiser
       </h1>
 
       <div className="login-container">
 
-        {/* Left Image */}
+        
         <div className="login-image">
           <img src="/room2.png" alt="furniture" />
         </div>
 
-        {/* Login Card */}
+        
         <div className="login-card">
 
           <h2>Login</h2>
@@ -74,10 +74,9 @@ function Login() {
 
           </form>
 
-          <p className="terms">
-            By continuing, you agree to our Terms of Services and acknowledge our
-            Privacy Policy. Standard Messaging rates may apply.
-          </p>
+          <p className="terms"style={{marginTop:"10px", fontSize:"14px"}}>
+Demo login → designer@hci.com / 1234
+</p>
 
         </div>
       </div>

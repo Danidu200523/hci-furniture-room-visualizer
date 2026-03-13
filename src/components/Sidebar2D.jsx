@@ -62,7 +62,7 @@ function Sidebar({ addObject, rotateSelected, deleteSelected, saveDesign }) {
       <div className="bottom-controls">
 
        
-        <button onClick={() => navigate("/view-3d")}>
+        <button className="switch-btn"onClick={() => navigate("/view-3d")}>
   Switch to 3D View
 </button>
 
