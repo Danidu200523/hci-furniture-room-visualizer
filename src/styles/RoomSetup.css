@@ -2,7 +2,7 @@
 .room-wrapper {
   display: flex;
   height: 100vh;
-  background: #ffffff;
+  background:var(--white);
   justify-content: center;
   align-items: center;
   gap: 40px;
