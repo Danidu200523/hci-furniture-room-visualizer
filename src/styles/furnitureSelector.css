@@ -11,7 +11,7 @@
 }
 
 .selector-box {
-  background: white;
+  background: var(--white);
   padding: 30px;
   border-radius: 10px;
   width: 400px;

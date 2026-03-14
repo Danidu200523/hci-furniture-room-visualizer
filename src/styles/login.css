@@ -1,7 +1,7 @@
 
 
 .login-page {
-  background: #f5f5f5;
+  background: var(--white);
   min-height: 100vh;
   padding: 30px 40px;
   font-family: "Poppins", sans-serif;
@@ -16,11 +16,11 @@
 }
 
 .logo span {
-  color: #00C8B3;
+  color: var(--mint);
   font-size: 14px;
 }
 
-/* ================= TITLE ================= */
+
 
 .title {
   text-align: center;
@@ -32,17 +32,15 @@
   color: #00C8B3;
 }
 
-/* ================= LAYOUT ================= */
 
 .login-container {
   margin-top: 40px;
   display: flex;
   justify-content: center;
-  align-items: stretch; /* makes image height equal to login card */
+  align-items: stretch; 
   gap: 40px;
 }
 
-/* ================= IMAGE ================= */
 
 .login-image {
   width: 280px;
@@ -56,7 +54,6 @@
   object-fit: cover;
 }
 
-/* ================= LOGIN CARD ================= */
 
 .login-card {
   width: 340px;
@@ -67,7 +64,6 @@
   position: relative;
 }
 
-/* top green line */
 
 .login-card::before {
   content: "";
@@ -85,7 +81,6 @@
   margin-bottom: 20px;
 }
 
-/* ================= INPUTS ================= */
 
 .login-card label {
   font-size: 14px;
@@ -105,7 +100,6 @@
   border-color: #00C8B3;
 }
 
-/* ================= BUTTON ================= */
 
 .login-btn {
   width: 100%;
@@ -123,7 +117,6 @@
   background: #00b3a0;
 }
 
-/* ================= ERROR ================= */
 
 .error {
   color: red;
@@ -132,7 +125,6 @@
   font-size: 13px;
 }
 
-/* ================= TERMS ================= */
 
 .terms {
   font-size: 10px;
